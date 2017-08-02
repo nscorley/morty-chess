@@ -5,7 +5,7 @@
 #ifndef HASH_HPP_INCLUDE
 #define HASH_HPP_INCLUDE
 
-#include "defs.h"
+#include "defs.hpp"
 #include "state.hpp"
 #include "util.hpp"
 #include <assert.h>

@@ -5,7 +5,7 @@
 #ifndef MOVE_GENERATOR_HPP_INCLUDE
 #define MOVE_GENERATOR_HPP_INCLUDE
 
-#include "defs.h"
+#include "defs.hpp"
 #include "state.hpp"
 #include <stdio.h>
 #include <vector>

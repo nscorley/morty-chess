@@ -5,8 +5,8 @@
 //  Created by Stiven Deleur on 5/12/16.
 //
 //
-#include "../include/movegenerator.hpp"
-#include "../include/util.hpp"
+#include "movegenerator.hpp"
+#include "util.hpp"
 
 U64 setMask[64];
 U64 clearMask[64];

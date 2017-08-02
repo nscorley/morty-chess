@@ -6,13 +6,13 @@
 //
 //
 
-#include "../include/state.hpp"
-#include "../include/evaluator.hpp"
-#include "../include/hash.hpp"
-#include "../include/movegenerator.hpp"
-#include "../include/search.hpp"
-#include "../include/searchcontroller.hpp"
-#include "../include/util.hpp"
+#include "evaluator.hpp"
+#include "hash.hpp"
+#include "movegenerator.hpp"
+#include "search.hpp"
+#include "searchcontroller.hpp"
+#include "state.hpp"
+#include "util.hpp"
 #include <algorithm>
 #include <ctime>
 #include <iostream>

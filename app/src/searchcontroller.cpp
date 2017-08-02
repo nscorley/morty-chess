@@ -6,7 +6,7 @@
 //
 //
 
-#include "../include/searchcontroller.hpp"
+#include "searchcontroller.hpp"
 
 void SearchController::checkTimeLimit() {
   /*if ((time(NULL) - _startTime.tv_sec) >= _timeLimit) {

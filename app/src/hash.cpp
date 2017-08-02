@@ -6,7 +6,7 @@
 //
 //
 
-#include "../include/hash.hpp"
+#include "hash.hpp"
 
 U64 zArray[64][12]; // Squares + piece types (2 colors * 6 pieces * 64
                     // squares)
