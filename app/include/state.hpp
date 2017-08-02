@@ -1,13 +1,9 @@
-//
-//  board.hpp
-//  Seanet
-//
-//  Created by Stiven Deleur on 5/12/16.
-//
-//
+/**
+ * The state is effectively a representation of the board
+ **/
 
-#ifndef board_hpp
-#define board_hpp
+#ifndef STATE_HPP_INCLUDE
+#define STATE_HPP_INCLUDE
 
 #include "defs.h"
 

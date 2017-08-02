@@ -1,13 +1,9 @@
-//
-//  search.h
-//  Seanet
-//
-//  Created by Nathaniel Corley on 5/16/16.
-//
-//
+/**
+ * Method definitions for negamax search algorithm
+ **/
 
-#ifndef __Seanet__search__
-#define __Seanet__search__
+#ifndef SEARCH_HPP_INCLUDE
+#define SEARCH_HPP_INCLUDE
 
 #include "evaluator.hpp"
 #include "hash.hpp"
