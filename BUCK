@@ -7,5 +7,5 @@ cxx_binary(
   srcs = glob([
     'app/src/**/*.cpp',
   ]),
-  compiler_flags = ['-std=c++11', "-Wall"],
+  compiler_flags = ['-std=c++11', "-Wall", "-xc++"],
 )
