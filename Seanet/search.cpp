@@ -273,7 +273,7 @@ int negamax(int alpha, int beta, int depth, State &state,
       continue;
     }
 
-    //   Reorder based on SEE
+    // Reorder based on SEE
     if ((!DEBUG || sControl._features[SEE_REORDERING]) &&
         state._pieces[M_TOSQ(*it)] != EMPTY) {
       int seeEval = see(*it, state);
@@ -495,7 +495,6 @@ int qSearch(int alpha, int beta, State &state, SearchController &sControl) {
           continue;
         }
       }
-
       scoredMoves.push_back(S_MOVE_AND_SCORE{*it, 0});
     }
     for (int moveNum = 0; moveNum < scoredMoves.size(); moveNum++) {

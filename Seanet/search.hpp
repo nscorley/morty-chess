@@ -22,4 +22,4 @@ int negamax(int alpha, int beta, int depth, State &state,
             SearchController &sControl, S_PVLINE &pvLine);
 int qSearch(int alpha, int beta, State &state, SearchController &sControl);
 
-#endif /* defined(__Seanet__search__) */
+#endif

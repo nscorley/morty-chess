@@ -1,10 +1,6 @@
-//
-//  board.cpp
-//  Seanet
-//
-//  Created by Stiven Deleur on 5/12/16.
-//
-//
+/**
+ * Will be refactored to be called State soon beware
+ **/
 
 #include "board.hpp"
 #include "movegenerator.hpp"
