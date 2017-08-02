@@ -6,8 +6,8 @@
 //
 //
 
-#include "movegenerator.hpp"
-#include "util.hpp"
+#include "../include/movegenerator.hpp"
+#include "../include/util.hpp"
 
 U64 pawnPush(U64 bb, int pawnSide, const State &s, bool moveTo = false);
 U64 pawnAttack(int index, int pawnSide, const State &s);

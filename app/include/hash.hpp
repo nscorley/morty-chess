@@ -1,16 +1,12 @@
-//
-//  hash.hpp
-//  Seanet
-//
-//  Created by Douglas Corley on 5/23/16.
-//
-//
+/**
+ * Defines functions to convert state representation to Zobrist hash
+ **/
 
-#ifndef hash_hpp
-#define hash_hpp
+#ifndef HASH_HPP_INCLUDE
+#define HASH_HPP_INCLUDE
 
-#include "board.hpp"
 #include "defs.h"
+#include "state.hpp"
 #include "util.hpp"
 #include <assert.h>
 #include <stdio.h>

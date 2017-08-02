@@ -2,8 +2,8 @@
  * Will be refactored to be called State soon beware
  **/
 
-#include "board.hpp"
-#include "movegenerator.hpp"
+#include "../include/state.hpp"
+#include "../include/movegenerator.hpp"
 #include <cmath>
 #include <iostream>
 #include <ostream>

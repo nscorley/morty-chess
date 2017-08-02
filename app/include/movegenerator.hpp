@@ -1,16 +1,12 @@
-//
-//  movegenerator.hpp
-//  Seanet
-//
-//  Created by Stiven Deleur on 5/12/16.
-//
-//
+/**
+ * Generates possible moves given the current state
+ **/
 
-#ifndef movegenerator_hpp
-#define movegenerator_hpp
+#ifndef MOVE_GENERATOR_HPP_INCLUDE
+#define MOVE_GENERATOR_HPP_INCLUDE
 
-#include "board.hpp"
 #include "defs.h"
+#include "state.hpp"
 #include <stdio.h>
 #include <vector>
 

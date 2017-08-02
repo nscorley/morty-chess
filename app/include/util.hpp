@@ -1,18 +1,14 @@
-//
-//  util.hpp
-//  Seanet
-//
-//  Created by Stiven Deleur on 5/12/16.
-//
-//
+/**
+ * Outlines util functions used for transformations, bit operations, etc.
+ **/
 
-#ifndef util_hpp
-#define util_hpp
+#ifndef UTIL_HPP_INCLUDE
+#define UTIL_HPP_INCLUDE
 
-#include "board.hpp"
 #include "defs.h"
 #include "evaluator.hpp"
 #include "hash.hpp"
+#include "state.hpp"
 #include "util.hpp"
 
 #include <algorithm>

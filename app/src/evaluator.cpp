@@ -6,8 +6,8 @@
 //
 //
 
-#include "evaluator.hpp"
-#include "movegenerator.hpp"
+#include "../include/evaluator.hpp"
+#include "../include/movegenerator.hpp"
 
 // Piece-Square tables
 

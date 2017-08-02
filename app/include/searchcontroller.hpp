@@ -1,16 +1,14 @@
-//
-//  searchcontroller.hpp
-//  Seanet
-//
-//  Created by Nathaniel Corley on 5/17/16.
-//
-//
+/**
+ * The search controller holds methods and member variables
+ * that dictate when the search stops,
+ * how long it takes, how many nodes have been searched, etc.
+ **/
 
-#ifndef __Seanet__searchcontroller__
-#define __Seanet__searchcontroller__
+#ifndef SEARCH_CONTROLLER_HPP_INCLUDE
+#define SEARCH_CONTROLLER_HPP_INCLUDE
 
-#include "board.hpp"
 #include "hash.hpp"
+#include "state.hpp"
 #include "util.hpp"
 #include <stdio.h>
 #include <sys/time.h>

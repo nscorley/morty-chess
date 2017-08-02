@@ -1,12 +1,12 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this
                           // in one cpp file
-#include "board.hpp"
-#include "catch.hpp"
-#include "hash.hpp"
-#include "movegenerator.hpp"
-#include "search.hpp"
-#include "searchcontroller.hpp"
-#include "util.hpp"
+#include "../include/state.hpp"
+#include "../include/catch.hpp"
+#include "../include/hash.hpp"
+#include "../include/movegenerator.hpp"
+#include "../include/search.hpp"
+#include "../include/searchcontroller.hpp"
+#include "../include/util.hpp"
 #include <ctime>
 #include <fstream>
 #include <iostream>

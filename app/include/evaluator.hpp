@@ -1,15 +1,12 @@
-//
-//  evaluator.hpp
-//  Seanet
-//
-//  Created by Nathaniel Corley on 5/16/16.
-//
-//
+/**
+ * Defines functions for evaluating state based on
+ * features and piece-square tables.
+ **/
 
-#ifndef __Seanet__evaluator__
-#define __Seanet__evaluator__
+#ifndef EVALUATOR_HPP_INCLUDE
+#define EVALUATOR_HPP_INCLUDE
 
-#include "board.hpp"
+#include "state.hpp"
 #include "util.hpp"
 #include <stdio.h>
 #include <vector>
@@ -37,4 +34,4 @@ int countKingPawnShields(State &state);
 FList getInitialFeatures(State &state);
 float getPhaseFactor(State &state);
 
-#endif /* defined(__Seanet__evaluator__) */
+#endif

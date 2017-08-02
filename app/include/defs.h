@@ -1,13 +1,9 @@
-//
-//  defs.h
-//  Seanet
-//
-//  Created by Stiven Deleur on 5/12/16.
-//
-//
+/**
+ * Constants
+ **/
 
-#ifndef defs_h
-#define defs_h
+#ifndef DEFS_H_INCLUDE
+#define DEFS_H_INCLUDE
 
 #include <map>
 #include <vector>
