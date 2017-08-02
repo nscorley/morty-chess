@@ -6,7 +6,7 @@
 //
 //
 
-#include "../include/search.hpp"
+#include "search.hpp"
 #include <algorithm>
 
 int quiescencePly = 0;
