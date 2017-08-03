@@ -19,7 +19,7 @@ void startSearch(State &state, SearchController &sControl) {
   sControl.resetStats();
   // set the _moveTime member variable to calculated or given amount
   sControl.getAllottedTime(state._fullMoveCounter);
-  std::cout << "Searching for " << sControl._moveTime << " seconds..."
+  std::cout << "Searching for " << sControl._moveTime << " milliseconds..."
             << std::endl;
   initHashTable(&sControl.table);
   state._bestLine = S_PVLINE();

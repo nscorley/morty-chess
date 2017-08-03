@@ -124,6 +124,7 @@ void UCI::takeUCIInput() {
       uciGo(inputParts, _uciSearchControl);
       searching = true;
       _uciSearchControl._analysisSide = _uciGameState._sideToMove;
+      cout << _uciSearchControl._moveTime << " MS/S Later" << endl;
       searchThread =
           thread(startSearch, ref(_uciGameState), ref(_uciSearchControl));
       break;
@@ -154,7 +155,7 @@ void UCI::takeUCIInput() {
   }
 }
 
-void uciGo(vector<string> inputParts, SearchController _uciSearchControl) {
+void uciGo(vector<string> inputParts, SearchController &_uciSearchControl) {
   for (int i = 1; i < inputParts.size(); i++) {
     switch (mapGoOptions[inputParts.at(i)]) {
     case G_SEARCHMOVES:
@@ -163,6 +164,7 @@ void uciGo(vector<string> inputParts, SearchController _uciSearchControl) {
     case G_PONDER:
       _uciSearchControl._moveTime = INT_MAX;
       _uciSearchControl._depthLimit = INT_MAX;
+      cout << _uciSearchControl._moveTime << " MS/S FIRST" << endl;
       break;
     case G_WTIME:
       _uciSearchControl._wTime = stoi(inputParts.at(i + 1));
@@ -189,7 +191,7 @@ void uciGo(vector<string> inputParts, SearchController _uciSearchControl) {
       // not implemented
       break;
     case G_MOVETIME:
-      _uciSearchControl._moveTime = stoi(inputParts.at(i + 1)) / 1000;
+      _uciSearchControl._moveTime = stoi(inputParts.at(i + 1));
       break;
     case G_INFINITE:
       _uciSearchControl._moveTime = INT_MAX;

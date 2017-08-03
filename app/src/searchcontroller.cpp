@@ -35,7 +35,7 @@ string SearchController::featuresToString() {
 void SearchController::getAllottedTime(int totalMoves) {
 
   // check if time per move set
-  if (_moveTime) {
+  if (_moveTime > 0) {
     return;
   }
 
