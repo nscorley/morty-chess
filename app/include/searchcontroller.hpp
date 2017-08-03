@@ -21,9 +21,9 @@ public:
   bool _output = true;
 
   // {PV_REORDERING, SEE_REORDERING, KH_REORDERING, HH_REORDERING, NULL_MOVE,
-  // TT_EVAL, TT_REORDERING, PV_SEARCH, ASPIRATION_WINDOWS, QS_REORDERING}
+  // TT_EVAL, TT_REORDERING, PV_SEARCH, QS_REORDERING}
   bool _features[NUM_OF_FEATURES] = {true, true, true, true, true,
-                                     true, true, true, true, true};
+                                     true, true, true, true};
   // UCI timing
   int _moveTime;  // i.e. seconds.move
   int _wTime;     // time (for game) white has left

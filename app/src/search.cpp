@@ -4,6 +4,7 @@
 
 #include "search.hpp"
 #include <algorithm>
+using namespace std;
 
 int quiescencePly = 0;
 Move killerMoves[64 * 3];     // 64 max plys with 3 moves each.
@@ -35,52 +36,19 @@ void startSearch(State &state, SearchController &sControl) {
   }
 
   // progressive deepening
-  int alpha = INT_MIN + 1;
-  int beta = INT_MAX - 1;
   for (int depth = 1; depth <= sControl._depthLimit; depth++) {
     sControl._currDepth = depth;
     sControl._maxDepth = depth;
-    int eval;
-
-    while (true) {
-      if (beta - alpha > ASP_WINDOW * 4) {
-        alpha = INT_MIN + 1;
-        beta = INT_MAX - 1;
-      }
-      eval = negamax(alpha, beta, depth, state, sControl, state._bestLine);
-      if (sControl._stopSearch) {
-        break;
-      };
-      if (!DEBUG || sControl._features[ASPIRATION_WINDOWS]) {
-        if (eval <= alpha) {
-          alpha -= ASP_WINDOW;
-
-          continue;
-        }
-        if (eval >= beta) {
-          beta += ASP_WINDOW;
-
-          continue;
-        }
-        alpha = eval - ASP_WINDOW;
-        beta = eval + ASP_WINDOW;
-        break;
-      } else {
-        break;
-      }
-    }
+    int eval = negamax(INT_MIN + 1, INT_MAX - 1, depth, state, sControl,
+                       state._bestLine);
     if (sControl._stopSearch) {
       break;
     };
 
     if (eval != state._lineEval) {
-      std::cout << "eval != state._lineEval: " << eval
-                << " != " << state._lineEval << std::endl;
-      std::cout << "alpha: " << alpha << "; beta: " << beta << std::endl;
+      cout << "eval != state._lineEval: " << eval << " != " << state._lineEval
+           << endl;
     };
-    if (DEBUG) {
-      // assert(eval == state._lineEval);
-    }
 
     timeval currTime;
     gettimeofday(&currTime, 0);
@@ -88,37 +56,35 @@ void startSearch(State &state, SearchController &sControl) {
         (int)(timeToMS(currTime) - timeToMS(sControl._startTime)) + 1;
     if (sControl._output) {
       if (sControl._uciOutput) {
-        std::cout << "info"
-                  << " depth " << sControl._currDepth << " seldepth "
-                  << sControl._maxDepth << " time " << timeElapsed << " nodes "
-                  << sControl._totalNodes << " score cp " << state._lineEval
-                  << " nps "
-                  << (int)(sControl._totalNodes / (timeElapsed / 1000.0))
-                  << " pv " << pvLineToString(state._bestLine) << std::endl;
+        cout << "info"
+             << " depth " << sControl._currDepth << " seldepth "
+             << sControl._maxDepth << " time " << timeElapsed << " nodes "
+             << sControl._totalNodes << " score cp " << state._lineEval
+             << " nps " << (int)(sControl._totalNodes / (timeElapsed / 1000.0))
+             << " pv " << pvLineToString(state._bestLine) << endl;
       } else {
-        std::cout << sControl._currDepth << " ["
-                  << state._lineEval * (state._sideToMove == WHITE ? 1 : -1)
-                  << "] " << pvLineToString(state._bestLine) << "; "
-                  << timeElapsed << " ms; "
-                  << (int)(sControl._totalNodes / (timeElapsed)) << " kn/s"
-                  << "; "
-                  << (float)(100.0 * sControl._fhfNodes / sControl._fhNodes)
-                  << "% fhf"
-                  << "; "
-                  << (float)(100.0 * sControl._fhNodes / sControl._totalNodes)
-                  << "% fh"
-                  << "; " << (sControl._totalNodes / 1000) << "K nodes"
-                  << "; seldepth " << sControl._maxDepth << std::endl;
+        cout << sControl._currDepth << " ["
+             << state._lineEval * (state._sideToMove == WHITE ? 1 : -1) << "] "
+             << pvLineToString(state._bestLine) << "; " << timeElapsed
+             << " ms; " << (int)(sControl._totalNodes / (timeElapsed))
+             << " kn/s"
+             << "; " << (float)(100.0 * sControl._fhfNodes / sControl._fhNodes)
+             << "% fhf"
+             << "; "
+             << (float)(100.0 * sControl._fhNodes / sControl._totalNodes)
+             << "% fh"
+             << "; " << (sControl._totalNodes / 1000) << "K nodes"
+             << "; seldepth " << sControl._maxDepth << endl;
       }
     }
   }
   sControl._stopSearch = true;
   if (sControl._uciOutput) {
-    std::cout << "bestmove " << moveToUCI(state._bestLine.moves[0]);
+    cout << "bestmove " << moveToUCI(state._bestLine.moves[0]);
     if (state._bestLine.moves[1]) {
-      std::cout << " ponder " << moveToUCI(state._bestLine.moves[1]);
+      cout << " ponder " << moveToUCI(state._bestLine.moves[1]);
     }
-    std::cout << std::endl;
+    cout << endl;
   }
 }
 
@@ -126,26 +92,25 @@ void addKillerMove(int ply, Move move) {
   int firstMoveIndex = ply * 3;
   if (M_EQUALS(move, killerMoves[firstMoveIndex])) {
   } else if (M_EQUALS(move, killerMoves[firstMoveIndex + 1])) {
-    std::swap(killerMoves[firstMoveIndex], killerMoves[firstMoveIndex + 1]);
+    swap(killerMoves[firstMoveIndex], killerMoves[firstMoveIndex + 1]);
   } else {
-    std::swap(killerMoves[firstMoveIndex + 1], killerMoves[firstMoveIndex + 2]);
-    std::swap(killerMoves[firstMoveIndex], killerMoves[firstMoveIndex + 1]);
+    swap(killerMoves[firstMoveIndex + 1], killerMoves[firstMoveIndex + 2]);
+    swap(killerMoves[firstMoveIndex], killerMoves[firstMoveIndex + 1]);
     killerMoves[firstMoveIndex] = move;
   }
 }
 
-void pickMove(int moveNum, std::vector<S_MOVE_AND_SCORE> &scoredMoves) {
+void pickMove(int moveNum, vector<S_MOVE_AND_SCORE> &scoredMoves) {
   int bestScore = INT_MIN;
   int bestNum = moveNum;
-  for (std::vector<S_MOVE_AND_SCORE>::iterator it =
-           scoredMoves.begin() + moveNum;
+  for (vector<S_MOVE_AND_SCORE>::iterator it = scoredMoves.begin() + moveNum;
        it != scoredMoves.end(); it++) {
     if (it->score > bestScore) {
       bestScore = it->score;
       bestNum = (int)(it - scoredMoves.begin());
     }
   }
-  std::swap(scoredMoves[moveNum], scoredMoves[bestNum]);
+  swap(scoredMoves[moveNum], scoredMoves[bestNum]);
 }
 
 int negamax(int alpha, int beta, int depth, State &state,
@@ -253,13 +218,12 @@ int negamax(int alpha, int beta, int depth, State &state,
       }
     }
   }
-  std::vector<S_MOVE_AND_SCORE> scoredMoves;
-  std::vector<Move> moves = generatePseudoMoves(state);
+  vector<S_MOVE_AND_SCORE> scoredMoves;
+  vector<Move> moves = generatePseudoMoves(state);
 
   scoredMoves.reserve(moves.size());
 
-  for (std::vector<Move>::iterator it = moves.begin(); it != moves.end();
-       ++it) {
+  for (vector<Move>::iterator it = moves.begin(); it != moves.end(); ++it) {
 
     // PV-move reorder
     if (!DEBUG || sControl._features[TT_REORDERING]) {
@@ -443,7 +407,7 @@ int qSearch(int alpha, int beta, State &state, SearchController &sControl) {
 
   bool inCheck = state.isInCheck(state._sideToMove);
 
-  std::vector<int> moves = generatePseudoMoves(state, inCheck);
+  vector<int> moves = generatePseudoMoves(state, inCheck);
   int legal = 0;
 
   int stand_pat = evaluate(state) * (state._sideToMove == WHITE ? 1 : -1);
@@ -456,11 +420,10 @@ int qSearch(int alpha, int beta, State &state, SearchController &sControl) {
     if (alpha < stand_pat) {
       alpha = stand_pat;
     }
-    std::vector<S_MOVE_AND_SCORE> scoredMoves;
+    vector<S_MOVE_AND_SCORE> scoredMoves;
     scoredMoves.reserve(moves.size());
 
-    for (std::vector<Move>::iterator it = moves.begin(); it != moves.end();
-         ++it) {
+    for (vector<Move>::iterator it = moves.begin(); it != moves.end(); ++it) {
       if (!inCheck && state._pieces[M_TOSQ(*it)] == EMPTY &&
           !M_ISPROMOTION(*it)) {
         continue;

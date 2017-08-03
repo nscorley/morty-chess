@@ -7,18 +7,19 @@
 #include <cmath>
 #include <iostream>
 #include <ostream>
+using namespace std;
 
 void State::printBoard() const {
   for (int y = 7; y >= 0; y--) {
-    std::string string = "";
+    string string = "";
     for (int x = 0; x < 8; x++) {
       string += "|";
       string += pieceToChar(_pieces[y * 8 + x]);
     }
     string += "|\n";
-    std::cout << y + 1 << string;
+    cout << y + 1 << string;
   }
-  std::cout << "  A B C D E F G H " << std::endl;
+  cout << "  A B C D E F G H " << endl;
 }
 
 void State::makeNullMove() {
@@ -93,7 +94,7 @@ void State::makeMove(Move &move) {
       clearSquare(_EPTarget);
       M_SETEP(move, true);
     }
-    if (std::abs((from - fromX) / 8 - (to - toX) / 8) > 1) {
+    if (abs((from - fromX) / 8 - (to - toX) / 8) > 1) {
       _EPTarget = to;
     } else {
       _EPTarget = -1;
@@ -114,7 +115,7 @@ void State::makeMove(Move &move) {
       clearSquare(_EPTarget);
       M_SETEP(move, true);
     }
-    if (std::abs((from - fromX) / 8 - (to - toX) / 8) > 1) {
+    if (abs((from - fromX) / 8 - (to - toX) / 8) > 1) {
       _EPTarget = to;
     } else {
       _EPTarget = -1;
@@ -191,9 +192,9 @@ void State::makeMove(Move &move) {
   }
   default:
     printBoard();
-    std::cout << "MOVE: " << moveToUCI(move) << "\n";
-    std::cout << "PIECE: " << movingP << "\n";
-    std::cout
+    cout << "MOVE: " << moveToUCI(move) << "\n";
+    cout << "PIECE: " << movingP << "\n";
+    cout
         << "Unknown piece passed to makeMove() function. Exiting with error.\n";
     exit(EXIT_FAILURE);
   }
@@ -229,7 +230,7 @@ void State::takeMove() {
   Move move = undo._move;
   if (!move) {
     printBoard();
-    std::cout << "Trying to Undo a NULL move.\n";
+    cout << "Trying to Undo a NULL move.\n";
     exit(EXIT_FAILURE);
   }
   _halfMoveClock = undo._halfMoveClock;

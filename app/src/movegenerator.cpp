@@ -8,6 +8,7 @@
 
 #include "movegenerator.hpp"
 #include "util.hpp"
+using namespace std;
 
 U64 pawnPush(U64 bb, int pawnSide, const State &s, bool moveTo = false);
 U64 pawnAttack(int index, int pawnSide, const State &s);
@@ -27,8 +28,8 @@ U64 occupancyVariation[64][4096];
 int pieceSquares[65];
 int pieceMoves[65];
 
-std::vector<Move> generateAllMoves(const State &s) {
-  std::vector<Move> moves;
+vector<Move> generateAllMoves(const State &s) {
+  vector<Move> moves;
   moves.reserve(64);
   U64 friendlyBB = s._sideToMove == WHITE ? s._pieceBitboards[WHITES]
                                           : s._pieceBitboards[BLACKS];
@@ -124,15 +125,15 @@ std::vector<Move> generateAllMoves(const State &s) {
   return moves;
 }
 
-void printMoves(std::string title, std::vector<Move> moves) {
-  std::cout << title;
-  for (std::vector<int>::iterator it = moves.begin(); it != moves.end(); ++it)
-    std::cout << ' ' << moveToUCI(*it);
-  std::cout << '\n';
+void printMoves(string title, vector<Move> moves) {
+  cout << title;
+  for (vector<int>::iterator it = moves.begin(); it != moves.end(); ++it)
+    cout << ' ' << moveToUCI(*it);
+  cout << '\n';
 }
 
-std::vector<Move> generateCheckEvasions(const State &s) {
-  std::vector<Move> moves;
+vector<Move> generateCheckEvasions(const State &s) {
+  vector<Move> moves;
   moves.reserve(64);
   U64 friendlyBB = s._sideToMove == WHITE ? s._pieceBitboards[WHITES]
                                           : s._pieceBitboards[BLACKS];
@@ -313,7 +314,7 @@ std::vector<Move> generateCheckEvasions(const State &s) {
   return moves;
 }
 
-std::vector<Move> generatePseudoMoves(const State &s, bool inCheck) {
+vector<Move> generatePseudoMoves(const State &s, bool inCheck) {
   if (inCheck) {
     return generateCheckEvasions(s);
   } else {
@@ -321,7 +322,7 @@ std::vector<Move> generatePseudoMoves(const State &s, bool inCheck) {
   }
 }
 
-std::vector<Move> generatePseudoMoves(const State &s) {
+vector<Move> generatePseudoMoves(const State &s) {
   return generatePseudoMoves(s, s.isInCheck(s._sideToMove));
 }
 
