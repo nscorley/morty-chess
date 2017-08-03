@@ -29,8 +29,8 @@ void uciSetPosition(std::vector<std::string> inputParts, std::string input,
 
 class UCI {
 private:
-  State _gameState;
-  SearchController _sControl;
+  State _uciGameState;
+  SearchController _uciSearchControl;
 
 public:
   void startUCI();

@@ -85,24 +85,20 @@ void UCI::takeUCIInput() {
   // input string from user
   string input;
 
-  // initializations of state, controller, and thread
-  SearchController uciSearchControl;
-  State uciGameState;
-
-  // create separate thread for search
+  // initialize search thread
   thread searchThread;
 
   // whether a search is in progress
   bool searching = false;
 
   // whether the search should output UCI information
-  uciSearchControl._uciOutput = true;
+  _uciSearchControl._uciOutput = true;
 
   // wait for input
   while (getline(cin, input)) {
 
     // join threads if search is complete
-    if (uciSearchControl._stopSearch == true) {
+    if (_uciSearchControl._stopSearch == true) {
       if (searchThread.joinable()) {
         searchThread.join();
       }
@@ -119,21 +115,21 @@ void UCI::takeUCIInput() {
       cout << "readyok\n";
       break;
     case C_UCI_NEW_GAME:
-      uciGameState = boardFromFEN("startpos");
+      _uciGameState = boardFromFEN("startpos");
       break;
     case C_POSITION:
-      uciSetPosition(inputParts, input, uciGameState);
+      uciSetPosition(inputParts, input, _uciGameState);
       break;
     case C_GO:
-      uciGo(inputParts, uciSearchControl);
+      uciGo(inputParts, _uciSearchControl);
       searching = true;
-      uciSearchControl._analysisSide = uciGameState._sideToMove;
+      _uciSearchControl._analysisSide = _uciGameState._sideToMove;
       searchThread =
-          thread(startSearch, ref(uciGameState), ref(uciSearchControl));
+          thread(startSearch, ref(_uciGameState), ref(_uciSearchControl));
       break;
     case C_STOP:
       // stop search
-      uciSearchControl._stopSearch = true;
+      _uciSearchControl._stopSearch = true;
       if (searchThread.joinable()) {
         searchThread.join();
       }
@@ -143,7 +139,7 @@ void UCI::takeUCIInput() {
       break;
     case C_QUIT:
       // quit UCI
-      uciSearchControl._stopSearch = true;
+      _uciSearchControl._stopSearch = true;
       if (searchThread.joinable()) {
         searchThread.join();
       }
@@ -158,46 +154,46 @@ void UCI::takeUCIInput() {
   }
 }
 
-void uciGo(vector<string> inputParts, SearchController uciSearchControl) {
+void uciGo(vector<string> inputParts, SearchController _uciSearchControl) {
   for (int i = 1; i < inputParts.size(); i++) {
     switch (mapGoOptions[inputParts.at(i)]) {
     case G_SEARCHMOVES:
       // not implemented
       break;
     case G_PONDER:
-      uciSearchControl._moveTime = INT_MAX;
-      uciSearchControl._depthLimit = INT_MAX;
+      _uciSearchControl._moveTime = INT_MAX;
+      _uciSearchControl._depthLimit = INT_MAX;
       break;
     case G_WTIME:
-      uciSearchControl._wTime = stoi(inputParts.at(i + 1));
+      _uciSearchControl._wTime = stoi(inputParts.at(i + 1));
       break;
     case G_BTIME:
-      uciSearchControl._bTime = stoi(inputParts.at(i + 1));
+      _uciSearchControl._bTime = stoi(inputParts.at(i + 1));
       break;
     case G_WINC:
-      uciSearchControl._wInc = stoi(inputParts.at(i + 1));
+      _uciSearchControl._wInc = stoi(inputParts.at(i + 1));
       break;
     case G_BINC:
-      uciSearchControl._bInc = stoi(inputParts.at(i + 1));
+      _uciSearchControl._bInc = stoi(inputParts.at(i + 1));
       break;
     case G_MOVESTOGO:
-      uciSearchControl._moveToGo = stoi(inputParts.at(i + 1));
+      _uciSearchControl._moveToGo = stoi(inputParts.at(i + 1));
       break;
     case G_DEPTH:
-      uciSearchControl._maxDepth = stoi(inputParts.at(i + 1));
+      _uciSearchControl._maxDepth = stoi(inputParts.at(i + 1));
       break;
     case G_NODES:
-      uciSearchControl._nodeLimit = stoi(inputParts.at(i + 1));
+      _uciSearchControl._nodeLimit = stoi(inputParts.at(i + 1));
       break;
     case G_MATE:
       // not implemented
       break;
     case G_MOVETIME:
-      uciSearchControl._moveTime = stoi(inputParts.at(i + 1)) / 1000;
+      _uciSearchControl._moveTime = stoi(inputParts.at(i + 1)) / 1000;
       break;
     case G_INFINITE:
-      uciSearchControl._moveTime = INT_MAX;
-      uciSearchControl._depthLimit = INT_MAX;
+      _uciSearchControl._moveTime = INT_MAX;
+      _uciSearchControl._depthLimit = INT_MAX;
       break;
     default:
       cout << "Did not recognize \'go\' command parameters." << endl;
@@ -208,13 +204,13 @@ void uciGo(vector<string> inputParts, SearchController uciSearchControl) {
 
 // sets the position based on passed string FEN and other parameters
 void uciSetPosition(vector<string> inputParts, string input,
-                    State &uciGameState) {
+                    State &_uciGameState) {
   string FEN = inputParts.at(1);
   if (FEN == "startpos") {
-    uciGameState = boardFromFEN("startpos");
+    _uciGameState = boardFromFEN("startpos");
   } else {
     FEN = input.substr(13);
-    uciGameState = boardFromFEN(FEN);
+    _uciGameState = boardFromFEN(FEN);
   }
   int i;
   for (i = 2; i < inputParts.size(); i++) {
@@ -225,6 +221,6 @@ void uciSetPosition(vector<string> inputParts, string input,
   }
   for (; i < inputParts.size(); i++) {
     Move move = moveFromUCI(inputParts.at(i));
-    uciGameState.makeMove(move);
+    _uciGameState.makeMove(move);
   }
 }

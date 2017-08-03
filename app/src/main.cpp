@@ -11,14 +11,14 @@
 using namespace std;
 
 // internal dependencies
-#include "../include/evaluator.hpp"
-#include "../include/hash.hpp"
-#include "../include/movegenerator.hpp"
-#include "../include/search.hpp"
-#include "../include/searchcontroller.hpp"
-#include "../include/state.hpp"
-#include "../include/uci.hpp"
-#include "../include/util.hpp"
+#include "evaluator.hpp"
+#include "hash.hpp"
+#include "movegenerator.hpp"
+#include "search.hpp"
+#include "searchcontroller.hpp"
+#include "state.hpp"
+#include "uci.hpp"
+#include "util.hpp"
 
 void takeAction();
 void welcomeScreen();
