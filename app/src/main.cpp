@@ -38,21 +38,25 @@ void welcomeScreen() {
             << std::endl;
   std::cout << "Please enter engine mode (uci or test)" << std::endl;
   std::string mode;
-  std::getline(std::cin, mode);
-  if (mode == "uci") {
-    UCI uci;
-    uci.startUCI();
-    uci.takeUCIInput();
-  } else if (mode == "test") {
-    std::cout << "Entering test mode..." << std::endl;
-    std::string FEN = "startpos";
-    FEN = "rn1q1rk1/p4ppp/1ppb4/3p4/2PP2b1/2PB1N2/P4PPP/1RBQ1RK1 w - -";
-    gameState = boardFromFEN(FEN);
-    while (true) {
-      takeAction();
+  while (true) {
+    std::getline(std::cin, mode);
+    if (mode == "uci") {
+      UCI uci;
+      uci.startUCI();
+      uci.takeUCIInput();
+      break;
+    } else if (mode == "test") {
+      std::cout << "Entering test mode..." << std::endl;
+      std::string FEN = "startpos";
+      FEN = "rn1q1rk1/p4ppp/1ppb4/3p4/2PP2b1/2PB1N2/P4PPP/1RBQ1RK1 w - -";
+      gameState = boardFromFEN(FEN);
+      while (true) {
+        takeAction();
+      }
+      break;
+    } else {
+      std::cout << "Sorry, please enter \"uci\" or \"test\"" << std::endl;
     }
-  } else {
-    std::cout << "Sorry, please enter \"uci\" or \"test\"" << std::endl;
   }
 }
 
