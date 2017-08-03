@@ -12,9 +12,6 @@ cxx_binary(
 
 cxx_binary(
   name = 'test',
-  # headers = subdir_glob([
-  #   ('../include', '**/*.hpp'),
-  # ]),
   headers = subdir_glob([
     ('app/include', '**/*.hpp'),
   ]),
@@ -23,8 +20,4 @@ cxx_binary(
     'app/test/**/*.cpp',
   ], excludes = ['app/src/main.cpp']),
   compiler_flags = ['-std=c++11', "-Wall", "-xc++"],
-  # srcs = glob([
-  #   # '../src/**/*.cpp',
-  #   '**/*.cpp',
-  # ]),
 )
