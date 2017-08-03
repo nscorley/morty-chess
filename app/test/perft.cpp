@@ -1,7 +1,9 @@
-#include "catch.hpp";
+#include "catch.hpp"
 #include "movegenerator.hpp"
 #include "state.hpp"
 #include "util.hpp"
+
+int leafNodes = 0;
 
 // recursive accessory function for perft tests
 int perftTest(State &state, int depth, int leafNodes) {
@@ -20,6 +22,7 @@ int perftTest(State &state, int depth, int leafNodes) {
     }
     state.takeMove();
   }
+  return 0;
 }
 
 TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
@@ -33,6 +36,7 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
   int TEST_LIMIT = 200;
   int maxDepth = 6;
   int perftStart = 1;
+  const clock_t startTime = clock();
 
   // get position strings
   std::ifstream file("perfttests.text");
@@ -75,7 +79,7 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
     printf("\n### Running Test #%d ###\n", testNum);
     for (int i = 0; i < 6 && depths[i] != 0; i++) {
       // time test
-      const clock_t startTime = clock();
+      const clock_t iStartTime = clock();
 
       // check depth
       if (i >= maxDepth) {
@@ -115,9 +119,6 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
       REQUIRE((int)depths[i] == leafNodes);
     }
   }
-
-  REQUIRE(Factorial(1) == 1);
-  REQUIRE(Factorial(2) == 2);
-  REQUIRE(Factorial(3) == 6);
-  REQUIRE(Factorial(10) == 3628800);
+  printf("PERFT test finished successfully in %f minutes\n",
+         (float(clock() - startTime) / (CLOCKS_PER_SEC * 60.0)));
 }
