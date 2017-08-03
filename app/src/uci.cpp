@@ -68,20 +68,20 @@ void init() {
 /**
  * Prints initial welcome message and information for UCI
  **/
-void UCI::startUCI() {
+void UCI::startUCI(ostream &outputStr) {
   // initialize command map
   init();
 
   // inform user
-  cout << "id name MortyChess 0.1b\n";
-  cout << "id author Stiven Deleur, Nathaniel Corley\n";
-  cout << "uciok\n";
+  outputStr << "id name MortyChess 0.1b\n";
+  outputStr << "id author Stiven Deleur, Nathaniel Corley\n";
+  outputStr << "uciok\n";
 }
 
 /**
  * Waits for command-line UCI input and parses appropriately
  **/
-void UCI::takeUCIInput() {
+void UCI::takeUCIInput(istream &inputStr, ostream &outputStr) {
   // input string from user
   string input;
 
@@ -95,7 +95,7 @@ void UCI::takeUCIInput() {
   _uciSearchControl._uciOutput = true;
 
   // wait for input
-  while (getline(cin, input)) {
+  while (getline(inputStr, input)) {
 
     // join threads if search is complete
     if (_uciSearchControl._stopSearch == true) {
@@ -112,7 +112,7 @@ void UCI::takeUCIInput() {
     // take action based on command
     switch (mapCommands[commandName]) {
     case C_IS_READY:
-      cout << "readyok\n";
+      outputStr << "readyok\n";
       break;
     case C_UCI_NEW_GAME:
       _uciGameState = boardFromFEN("startpos");
@@ -124,7 +124,7 @@ void UCI::takeUCIInput() {
       uciGo(inputParts, _uciSearchControl);
       searching = true;
       _uciSearchControl._analysisSide = _uciGameState._sideToMove;
-      cout << _uciSearchControl._moveTime << " MS/S Later" << endl;
+      outputStr << _uciSearchControl._moveTime << " MS/S Later" << endl;
       searchThread =
           thread(startSearch, ref(_uciGameState), ref(_uciSearchControl));
       break;
@@ -149,7 +149,7 @@ void UCI::takeUCIInput() {
       // not implemented
       break;
     default:
-      cout << "Unrecognized UCI command: " << input << endl;
+      outputStr << "Unrecognized UCI command: " << input << endl;
       break;
     }
   }
@@ -164,7 +164,6 @@ void uciGo(vector<string> inputParts, SearchController &_uciSearchControl) {
     case G_PONDER:
       _uciSearchControl._moveTime = INT_MAX;
       _uciSearchControl._depthLimit = INT_MAX;
-      cout << _uciSearchControl._moveTime << " MS/S FIRST" << endl;
       break;
     case G_WTIME:
       _uciSearchControl._wTime = stoi(inputParts.at(i + 1));

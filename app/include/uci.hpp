@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <ctime>
 #include <iostream>
+#include <istream>
+#include <ostream>
 #include <thread>
 #include <vector>
 
@@ -34,8 +36,9 @@ private:
   SearchController _uciSearchControl;
 
 public:
-  void startUCI();
-  void takeUCIInput();
+  void startUCI(std::ostream &outputStr = std::cout);
+  void takeUCIInput(std::istream &inputStr = std::cin,
+                    std::ostream &outputStr = std::cout);
   void takeAction();
 };
 
