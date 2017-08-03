@@ -724,9 +724,6 @@ string searchFeaturesToString(bool *features) {
   if (features[PV_SEARCH]) {
     string += "PVS ";
   }
-  if (features[ASPIRATION_WINDOWS]) {
-    string += "AS_W ";
-  }
   if (features[QS_REORDERING]) {
     string += "QS_R ";
   }

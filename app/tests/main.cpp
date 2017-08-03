@@ -1,11 +1,11 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this
                           // in one cpp file
-#include "../include/state.hpp"
 #include "../include/catch.hpp"
 #include "../include/hash.hpp"
 #include "../include/movegenerator.hpp"
 #include "../include/search.hpp"
 #include "../include/searchcontroller.hpp"
+#include "../include/state.hpp"
 #include "../include/util.hpp"
 #include <ctime>
 #include <fstream>
@@ -210,7 +210,6 @@ void speedTest(std::string testPath) {
   control[TT_EVAL] = true;
   control[TT_REORDERING] = true;
   control[PV_SEARCH] = true;
-  control[ASPIRATION_WINDOWS] = true;
   control[QS_REORDERING] = false;
 
   const int degreesOfFreedom = 1;

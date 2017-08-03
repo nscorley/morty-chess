@@ -35,40 +35,11 @@ void startSearch(State &state, SearchController &sControl) {
   }
 
   // progressive deepening
-  int alpha = INT_MIN + 1;
-  int beta = INT_MAX - 1;
   for (int depth = 1; depth <= sControl._depthLimit; depth++) {
     sControl._currDepth = depth;
     sControl._maxDepth = depth;
-    int eval;
-
-    while (true) {
-      if (beta - alpha > ASP_WINDOW * 4) {
-        alpha = INT_MIN + 1;
-        beta = INT_MAX - 1;
-      }
-      eval = negamax(alpha, beta, depth, state, sControl, state._bestLine);
-      if (sControl._stopSearch) {
-        break;
-      };
-      if (!DEBUG || sControl._features[ASPIRATION_WINDOWS]) {
-        if (eval <= alpha) {
-          alpha -= ASP_WINDOW;
-
-          continue;
-        }
-        if (eval >= beta) {
-          beta += ASP_WINDOW;
-
-          continue;
-        }
-        alpha = eval - ASP_WINDOW;
-        beta = eval + ASP_WINDOW;
-        break;
-      } else {
-        break;
-      }
-    }
+    int eval = negamax(INT_MIN + 1, INT_MAX - 1, depth, state, sControl,
+                       state._bestLine);
     if (sControl._stopSearch) {
       break;
     };
@@ -76,11 +47,7 @@ void startSearch(State &state, SearchController &sControl) {
     if (eval != state._lineEval) {
       cout << "eval != state._lineEval: " << eval << " != " << state._lineEval
            << endl;
-      cout << "alpha: " << alpha << "; beta: " << beta << endl;
     };
-    if (DEBUG) {
-      // assert(eval == state._lineEval);
-    }
 
     timeval currTime;
     gettimeofday(&currTime, 0);

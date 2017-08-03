@@ -67,7 +67,7 @@ typedef struct {
   Move moves[256];
 } S_PVLINE;
 
-const int NUM_OF_FEATURES = 10;
+const int NUM_OF_FEATURES = 9;
 enum {
   PV_REORDERING,
   SEE_REORDERING,
@@ -77,7 +77,6 @@ enum {
   TT_EVAL,
   TT_REORDERING,
   PV_SEARCH,
-  ASPIRATION_WINDOWS,
   QS_REORDERING
 };
 
