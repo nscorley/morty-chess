@@ -23,12 +23,13 @@
 #include "util.hpp"
 
 void uciGo(std::vector<std::string> inputParts,
-           SearchController uciSearchControl);
+           SearchController &uciSearchControl);
 void uciSetPosition(std::vector<std::string> inputParts, std::string input,
                     State &uciGameState);
 
 class UCI {
 private:
+  // initialize game state and search control
   State _uciGameState;
   SearchController _uciSearchControl;
 
