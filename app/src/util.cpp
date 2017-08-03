@@ -7,6 +7,7 @@
 //
 #include "movegenerator.hpp"
 #include "util.hpp"
+using namespace std;
 
 U64 setMask[64];
 U64 clearMask[64];
@@ -16,18 +17,17 @@ U64 pawnAttacks[2][64];
 U64 bbBlockers8Way[64][8];
 unsigned char popCountOfByte256[256];
 
-std::vector<std::string> &split(const std::string &s, char delim,
-                                std::vector<std::string> &elems) {
-  std::stringstream ss(s);
-  std::string item;
-  while (std::getline(ss, item, delim)) {
+vector<string> &split(const string &s, char delim, vector<string> &elems) {
+  stringstream ss(s);
+  string item;
+  while (getline(ss, item, delim)) {
     elems.push_back(item);
   }
   return elems;
 }
 
-std::vector<std::string> split(const std::string &s, char delim) {
-  std::vector<std::string> elems;
+vector<string> split(const string &s, char delim) {
+  vector<string> elems;
   split(s, delim, elems);
   return elems;
 }
@@ -131,7 +131,7 @@ int bitboardForPiece(Piece p) {
   }
 }
 
-int uciToIndex(std::string uci) {
+int uciToIndex(string uci) {
   if (uci.length() == 2) {
     int x = uci[0] - 97;
     int y = uci[1] - '0' - 1;
@@ -141,14 +141,14 @@ int uciToIndex(std::string uci) {
   }
 }
 
-Move moveFromSAN(std::string SAN, State &state) {
+Move moveFromSAN(string SAN, State &state) {
 
-  SAN.erase(std::remove(SAN.begin(), SAN.end(), '+'), SAN.end());
+  SAN.erase(remove(SAN.begin(), SAN.end(), '+'), SAN.end());
 
-  std::vector<char> parts(SAN.begin(), SAN.end());
+  vector<char> parts(SAN.begin(), SAN.end());
   int to = 0;
   int from = 0;
-  std::vector<char>::reverse_iterator rit = parts.rbegin();
+  vector<char>::reverse_iterator rit = parts.rbegin();
 
   Piece promotion = EMPTY;
   bool ep = false;
@@ -177,7 +177,7 @@ Move moveFromSAN(std::string SAN, State &state) {
     rit += 4;
   }
 
-  std::string move{static_cast<char>(*(rit + 1)), static_cast<char>(*rit)};
+  string move{static_cast<char>(*(rit + 1)), static_cast<char>(*rit)};
   to = uciToIndex(move);
   rit += 2;
 
@@ -261,7 +261,7 @@ Move moveFromSAN(std::string SAN, State &state) {
 
         i++;
       }
-      std::cout << "ERROR: moveFromSAN()" << std::endl;
+      cout << "ERROR: moveFromSAN()" << endl;
     }
   }
 
@@ -275,12 +275,12 @@ Move moveFromSAN(std::string SAN, State &state) {
   return m;
 }
 
-std::string moveToSAN(Move move, State state) {
+string moveToSAN(Move move, State state) {
 
   // Note: function does not handle cases where either file or rank alone will
   // not disambiguate moves (very rare)
 
-  std::string s = "";
+  string s = "";
   int from = M_FROMSQ(move);
   int to = M_TOSQ(move);
   int fromX = from % 8;
@@ -304,7 +304,7 @@ std::string moveToSAN(Move move, State state) {
 
       if (setBits[1] != -1) {
         int y = (from - fromX) / 8 + 1;
-        s += std::to_string(y);
+        s += to_string(y);
 
       } else {
         s += (char)(fromX + 97);
@@ -345,17 +345,17 @@ std::string moveToSAN(Move move, State state) {
   return s;
 }
 
-std::string indexToUCI(int index) {
+string indexToUCI(int index) {
   int x = index % 8;
   int y = (index - x) / 8;
-  std::string uci;
+  string uci;
   uci.push_back(x + 97);
   uci.push_back(y + '0' + 1);
   return uci;
 }
 
-std::string boardToFEN(const State &b) {
-  std::string FEN = "";
+string boardToFEN(const State &b) {
+  string FEN = "";
   int indices[64];
   int *pindex = indices;
   for (int i = 0; i < 8;
@@ -369,14 +369,14 @@ std::string boardToFEN(const State &b) {
     int index = indices[i];
     Piece p = b._pieces[index]; // Use getPieceAtIndex function here...
     if (p != EMPTY) {
-      FEN += adjEmpty > 0 ? std::to_string(adjEmpty) : "";
+      FEN += adjEmpty > 0 ? to_string(adjEmpty) : "";
       adjEmpty = 0;
-      FEN += std::string(1, pieceToChar(p));
+      FEN += string(1, pieceToChar(p));
     } else {
       adjEmpty++;
     }
     if (index % 8 == 7) {
-      FEN += adjEmpty > 0 ? std::to_string(adjEmpty) : "";
+      FEN += adjEmpty > 0 ? to_string(adjEmpty) : "";
       adjEmpty = 0;
       FEN += index != 7 ? "/" : "";
     }
@@ -385,7 +385,7 @@ std::string boardToFEN(const State &b) {
 
   // Castling rights
   int castling[] = {WKCA, WQCA, BKCA, BQCA};
-  std::string castlingStrings[] = {"K", "Q", "k", "q"};
+  string castlingStrings[] = {"K", "Q", "k", "q"};
   for (auto &&right : castling) {
     U64 isolated = b._castleRights & right;
     FEN += isolated != 0 ? castlingStrings[LS1B(isolated)] : "";
@@ -395,37 +395,35 @@ std::string boardToFEN(const State &b) {
   // EP Target
   FEN += b._EPTarget != -1 ? " " + indexToUCI(b._EPTarget) + " " : " - ";
   // Move counters
-  FEN += std::to_string(b._halfMoveClock) + " " +
-         std::to_string(b._fullMoveCounter);
+  FEN += to_string(b._halfMoveClock) + " " + to_string(b._fullMoveCounter);
 
   return FEN;
 }
 
-State boardFromFEN(std::string FEN) {
+State boardFromFEN(string FEN) {
   State b;
   if (FEN == "startpos") {
     FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   }
-  std::vector<std::string> subFEN = split(FEN, ' ');
+  vector<string> subFEN = split(FEN, ' ');
 
-  std::vector<std::string> piecesByRow = split(subFEN[0], '/');
-  std::string sideToMove = subFEN[1];
-  std::string castlingRights = subFEN[2];
-  std::string enPassantTarget = subFEN[3];
+  vector<string> piecesByRow = split(subFEN[0], '/');
+  string sideToMove = subFEN[1];
+  string castlingRights = subFEN[2];
+  string enPassantTarget = subFEN[3];
   int halfMoveClock = 0;
   int fullMoveCounter = 0;
   if (subFEN.size() > 4) {
-    halfMoveClock = std::stoi(subFEN[4]);
-    fullMoveCounter = std::stoi(subFEN[5]);
+    halfMoveClock = stoi(subFEN[4]);
+    fullMoveCounter = stoi(subFEN[5]);
   }
 
   int y = 7;
-  for (std::vector<std::string>::iterator it = piecesByRow.begin();
+  for (vector<string>::iterator it = piecesByRow.begin();
        it != piecesByRow.end(); ++it) {
     int x = 0;
-    for (std::string::iterator piece = it->begin(); piece != it->end();
-         ++piece) {
-      if (std::isdigit(*piece)) {
+    for (string::iterator piece = it->begin(); piece != it->end(); ++piece) {
+      if (isdigit(*piece)) {
         x += *piece - '0';
       } else {
         int index = y * 8 + x;
@@ -439,8 +437,8 @@ State boardFromFEN(std::string FEN) {
     y--;
   }
   b._sideToMove = sideToMove == "w" ? WHITE : BLACK;
-  for (std::string::iterator it = castlingRights.begin();
-       it != castlingRights.end(); ++it) {
+  for (string::iterator it = castlingRights.begin(); it != castlingRights.end();
+       ++it) {
     switch (*it) {
     case 'Q':
       if (b._pieces[0] == wR && b._pieces[4] == wK) {
@@ -473,16 +471,16 @@ State boardFromFEN(std::string FEN) {
   return b;
 }
 
-static inline void trim(std::string &s) {
+static inline void trim(string &s) {
   // trim leading spaces
   size_t startpos = s.find_first_not_of(" \t");
-  if (std::string::npos != startpos) {
+  if (string::npos != startpos) {
     s = s.substr(startpos);
   }
 
   // trim trailing spaces
   size_t endpos = s.find_last_not_of(" \t");
-  if (std::string::npos != endpos) {
+  if (string::npos != endpos) {
     s = s.substr(0, endpos + 1);
   }
 }
@@ -491,10 +489,10 @@ static inline void trim(std::string &s) {
  Returns a KeyInfoMap (a map from <string, string>) with information from the
  EDP. FEN is stored in map["fen"], for example.
  */
-KeyInfoMap splitEDP(std::string EDP) {
+KeyInfoMap splitEDP(string EDP) {
   KeyInfoMap result;
-  std::vector<std::string> subEDP = split(EDP, ';');
-  std::vector<std::string> subFEN = split(subEDP[0], ' ');
+  vector<string> subEDP = split(EDP, ';');
+  vector<string> subFEN = split(subEDP[0], ' ');
   subEDP.erase(subEDP.begin());
   result["fen"] =
       subFEN[0] + " " + subFEN[1] + " " + subFEN[2] + " " + subFEN[3];
@@ -504,10 +502,9 @@ KeyInfoMap splitEDP(std::string EDP) {
     result[subFEN[4]] = subFEN[5];
   }
 
-  for (std::vector<std::string>::iterator it = subEDP.begin();
-       it != subEDP.end(); ++it) {
+  for (vector<string>::iterator it = subEDP.begin(); it != subEDP.end(); ++it) {
     trim(*it);
-    std::vector<std::string> sub = split(*it, ' ');
+    vector<string> sub = split(*it, ' ');
     if (sub.size() > 1) {
       trim(sub[0]);
       trim(sub[1]);
@@ -590,8 +587,8 @@ void initPresets() {
   initZobrists();
 }
 
-std::string bbToString(U64 bb) {
-  std::string string = "";
+string bbToString(U64 bb) {
+  string string = "";
   for (int y = 7; y >= 0; y--) {
     for (int x = 0; x < 8; x++) {
       if ((bb & (1ULL << (x + y * 8))) != 0) {
@@ -605,15 +602,15 @@ std::string bbToString(U64 bb) {
   return string;
 }
 
-std::string moveToUCI(int m) {
-  std::string uci = indexToUCI(M_FROMSQ(m)) + indexToUCI(M_TOSQ(m));
+string moveToUCI(int m) {
+  string uci = indexToUCI(M_FROMSQ(m)) + indexToUCI(M_TOSQ(m));
   if (M_ISPROMOTION(m)) {
     uci += tolower(pieceToChar((Piece)M_PROMOTIONP(m)));
   }
   return uci;
 }
 
-int moveFromUCI(std::string uci) {
+int moveFromUCI(string uci) {
   if (uci.length() != 4 && uci.length() != 5) {
     return 0;
   }
@@ -628,8 +625,8 @@ int moveFromUCI(std::string uci) {
   return move;
 }
 
-std::string pvLineToString(S_PVLINE line) {
-  std::string str;
+string pvLineToString(S_PVLINE line) {
+  string str;
   for (int i = 0; i < line.moveCount; i++) {
     str += moveToUCI(line.moves[i]);
     str += ' ';
@@ -637,8 +634,8 @@ std::string pvLineToString(S_PVLINE line) {
   return str;
 }
 
-std::string moveLineToString(std::vector<Move> line) {
-  std::string str;
+string moveLineToString(vector<Move> line) {
+  string str;
   for (Move move : line) {
     str += moveToUCI(move);
     str += ' ';
@@ -682,12 +679,12 @@ int see(Move move, const State &s) {
   U64 fromSet = setMask[M_FROMSQ(move)];
   U64 occ = s.allPieces();
   U64 attadef = attacksTo(attackedSquare, s, side, occ);
-  gain[d] = std::abs(MATERIAL_WORTH[s._pieces[attackedSquare]]);
+  gain[d] = abs(MATERIAL_WORTH[s._pieces[attackedSquare]]);
   while (fromSet) {
     d++; // next depth and side
-    gain[d] = std::abs(MATERIAL_WORTH[s._pieces[LS1B(fromSet)]]) -
+    gain[d] = abs(MATERIAL_WORTH[s._pieces[LS1B(fromSet)]]) -
               gain[d - 1]; // speculative store, if defended
-    if (std::max(-gain[d - 1], gain[d]) < 0) {
+    if (max(-gain[d - 1], gain[d]) < 0) {
       break; // pruning does not influence the result
     }
     occ ^= fromSet; // reset bit in temporary occupancy (for x-Rays)
@@ -696,13 +693,13 @@ int see(Move move, const State &s) {
     fromSet = getLeastValuablePiece(attadef, s);
   }
   while (--d) {
-    gain[d - 1] = -std::max(-gain[d - 1], gain[d]);
+    gain[d - 1] = -max(-gain[d - 1], gain[d]);
   }
   return gain[0];
 }
 
-std::string searchFeaturesToString(bool *features) {
-  std::string string = "";
+string searchFeaturesToString(bool *features) {
+  string string = "";
   if (features[PV_REORDERING]) {
     string += "PV_R ";
   }
@@ -739,22 +736,22 @@ std::string searchFeaturesToString(bool *features) {
   return string;
 }
 
-std::string historyToString(State &state) {
-  std::string string = "";
-  for (std::vector<S_UNDO>::iterator it = state._history.begin();
+string historyToString(State &state) {
+  string string = "";
+  for (vector<S_UNDO>::iterator it = state._history.begin();
        it != state._history.end(); ++it) {
     string += moveToUCI(it->_move) + " ";
   }
   return string;
 }
 
-std::vector<std::string> exportGamesFromPGN(std::ifstream file) {
-  std::vector<std::string> games;
+vector<string> exportGamesFromPGN(ifstream file) {
+  vector<string> games;
 
   int gameNum = 0;
 
-  std::string line;
-  while (std::getline(file, line)) {
+  string line;
+  while (getline(file, line)) {
     if (games.size() <= gameNum) {
       games.resize(gameNum + 1);
     }
@@ -774,13 +771,13 @@ std::vector<std::string> exportGamesFromPGN(std::ifstream file) {
   }
   return games;
 }
-std::vector<Move> getGameMoveLine(std::string game) {
+vector<Move> getGameMoveLine(string game) {
   int moveNum = 0;
-  std::vector<std::string> movesSAN = split(game, ' ');
-  std::vector<Move> moveLine;
+  vector<string> movesSAN = split(game, ' ');
+  vector<Move> moveLine;
   State state = boardFromFEN("startpos");
   ;
-  for (std::string moveSAN : movesSAN) {
+  for (string moveSAN : movesSAN) {
     if (moveSAN == "") {
       break;
     }
@@ -789,11 +786,11 @@ std::vector<Move> getGameMoveLine(std::string game) {
       moveSAN = moveSAN.substr(moveSAN.find(".") + 1);
     }
     //    state.printBoard();
-    //    std::cout << boardToFEN(state) << std::endl;
+    //    cout << boardToFEN(state) << endl;
     //    if (!state.isPositionLegal()) {
-    //      std::cout << "ILLEGAL POSITION!" << std::endl;
+    //      cout << "ILLEGAL POSITION!" << endl;
     //    }
-    //    std::cout << "\nParsing '" << moveSAN << "'" << std::endl;
+    //    cout << "\nParsing '" << moveSAN << "'" << endl;
     Move move = moveFromSAN(moveSAN, state);
     state.makeMove(move);
 
@@ -802,9 +799,9 @@ std::vector<Move> getGameMoveLine(std::string game) {
   }
   return moveLine;
 }
-int getPGNGameWinner(std::string game) {
-  std::vector<std::string> movesSAN = split(game, ' ');
-  std::string gameResult = movesSAN.back();
+int getPGNGameWinner(string game) {
+  vector<string> movesSAN = split(game, ' ');
+  string gameResult = movesSAN.back();
   if (gameResult == "1-0") {
     return WHITE;
   } else if (gameResult == "0-1") {
@@ -812,9 +809,9 @@ int getPGNGameWinner(std::string game) {
   } else if (gameResult == "1/2-1/2") {
     return NONE;
   } else {
-    std::cout << "UNKNOWN GAME WINNER!" << std::endl;
-    std::cout << "Game: " << game << std::endl;
-    std::cout << "Result: " << gameResult << std::endl;
+    cout << "UNKNOWN GAME WINNER!" << endl;
+    cout << "Game: " << game << endl;
+    cout << "Result: " << gameResult << endl;
   }
   return 0;
 }

@@ -7,6 +7,7 @@
 //
 
 #include "hash.hpp"
+using namespace std;
 
 U64 zArray[64][12]; // Squares + piece types (2 colors * 6 pieces * 64
                     // squares)
@@ -130,7 +131,7 @@ U64 getZobristHash(const State &s) {
       zKey ^= zArray[i][11];
       break;
     default:
-      std::cout
+      cout
           << "Unknown piece uncovered in getZobristHash() function. Exiting...";
       exit(0);
     }
