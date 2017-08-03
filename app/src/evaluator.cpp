@@ -8,6 +8,7 @@
 
 #include "evaluator.hpp"
 #include "movegenerator.hpp"
+using namespace std;
 
 // Piece-Square tables
 
@@ -147,7 +148,7 @@ int evaluateGameOver(State &state, int contempt) {
   }
 }
 
-bool isGameOver(State &state, std::vector<Move> moves) {
+bool isGameOver(State &state, vector<Move> moves) {
   for (Move move : moves) {
     if (state.isLegalMove(move)) {
       return false;
@@ -166,7 +167,7 @@ bool isThreeFoldRepetition(State &state) {
   }
   S_UNDO lastUndo = state._history.back();
 
-  for (std::vector<S_UNDO>::reverse_iterator rit = state._history.rbegin();
+  for (vector<S_UNDO>::reverse_iterator rit = state._history.rbegin();
        rit <= state._history.rbegin() + lastUndo._halfMoveClock &&
        rit != state._history.rend();
        ++rit)
