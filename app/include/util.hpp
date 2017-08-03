@@ -5,7 +5,7 @@
 #ifndef UTIL_HPP_INCLUDE
 #define UTIL_HPP_INCLUDE
 
-#include "defs.h"
+#include "defs.hpp"
 #include "evaluator.hpp"
 #include "hash.hpp"
 #include "state.hpp"

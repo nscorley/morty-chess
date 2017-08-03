@@ -2,7 +2,7 @@
  * Implementations for basic search control functions. e.g. time checking, etc.
  **/
 
-#include "../include/searchcontroller.hpp"
+#include "searchcontroller.hpp"
 using namespace std;
 
 void SearchController::checkTimeLimit() {

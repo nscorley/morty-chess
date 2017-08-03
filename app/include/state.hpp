@@ -5,7 +5,7 @@
 #ifndef STATE_HPP_INCLUDE
 #define STATE_HPP_INCLUDE
 
-#include "defs.h"
+#include "defs.hpp"
 
 #include <stack>
 #include <stdio.h>
