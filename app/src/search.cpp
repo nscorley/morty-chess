@@ -1,28 +1,26 @@
-//
-//  search.cpp
-//  Seanet
-//
-//  Created by Nathaniel Corley on 5/16/16.
-//
-//
+/**
+ * Contains brunt of search algorithms and functionality
+ **/
 
 #include "search.hpp"
 #include <algorithm>
 
 int quiescencePly = 0;
-Move killerMoves[64 * 3];     // 64 mAX plys with 3 moves each.
-int historyHeuristic[64][64]; // historyHeuristic[from][to]
+Move killerMoves[64 * 3];     // 64 max plys with 3 moves each.
+int historyHeuristic[64][64]; // of form historyHeuristic[from][to]
 S_PVLINE NULL_LINE;
 
 /**
-Takes input of a state, time limit, and (optional) max depth, returns the best
+Takes input of a state and search controller, returns the best
 move for the state.sideToMove() as an int.
  **/
-void search(State &state, SearchController &sControl) {
+void startSearch(State &state, SearchController &sControl) {
+  // reset search statistics (e.g. total nods, qNodes, etc.)
   sControl.resetStats();
+  // set the _moveTime member variable to calculated or given amount
   sControl.getAllottedTime(state._fullMoveCounter);
-  sControl.getAllottedTime(state._fullMoveCounter);
-  std::cout << "ALLOTTED TIME: " << sControl._timeLimit << std::endl;
+  std::cout << "Searching for " << sControl._moveTime << " seconds..."
+            << std::endl;
   initHashTable(&sControl.table);
   state._bestLine = S_PVLINE();
 
@@ -35,6 +33,8 @@ void search(State &state, SearchController &sControl) {
       historyHeuristic[from][to] = 0;
     }
   }
+
+  // progressive deepening
   int alpha = INT_MIN + 1;
   int beta = INT_MAX - 1;
   for (int depth = 1; depth <= sControl._depthLimit; depth++) {
@@ -204,7 +204,6 @@ int negamax(int alpha, int beta, int depth, State &state,
 
   if ((!DEBUG || sControl._features[NULL_MOVE]) &&
       !state.isInCheck(state._sideToMove)) {
-
     state.makeNullMove();
     state._ply++;
     int score =

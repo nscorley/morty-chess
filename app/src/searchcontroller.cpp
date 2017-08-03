@@ -1,20 +1,14 @@
-//
-//  searchcontroller.cpp
-//  Seanet
-//
-//  Created by Nathaniel Corley on 5/17/16.
-//
-//
+/**
+ * Implementations for basic search control functions. e.g. time checking, etc.
+ **/
 
 #include "searchcontroller.hpp"
+using namespace std;
 
 void SearchController::checkTimeLimit() {
-  /*if ((time(NULL) - _startTime.tv_sec) >= _timeLimit) {
-    _stopSearch = true;
-  }*/
   timeval currTime;
   gettimeofday(&currTime, 0);
-  if ((timeToMS(currTime) - timeToMS(_startTime) >= _timeLimit)) {
+  if ((timeToMS(currTime) - timeToMS(_startTime) >= _moveTime)) {
     _stopSearch = true;
   }
 }
@@ -31,17 +25,27 @@ void SearchController::resetStats() {
   _stopSearch = false;
 }
 
-std::string SearchController::featuresToString() {
+string SearchController::featuresToString() {
   return searchFeaturesToString(_features);
 }
 
+/**
+ * Fetch or calculate alloted time for move
+ **/
 void SearchController::getAllottedTime(int totalMoves) {
 
+  // check if time per move set
+  if (_moveTime) {
+    return;
+  }
+
+  // TODO: IDK what this is about? Why just white?
   if (_wTime <= 0) {
     return;
   }
   int time = _analysisSide == WHITE ? _wTime : _bTime;
 
+  // integrate to find alloted time
   double scalar =
       (_dampeningFactor * time *
        pow(e, (_dampeningFactor * (_upperMoveBound + totalMoves)))) /
@@ -49,5 +53,5 @@ void SearchController::getAllottedTime(int totalMoves) {
        pow(e, (_dampeningFactor * totalMoves)));
 
   int result = (int)(scalar * pow(e, (-_dampeningFactor * totalMoves)));
-  _timeLimit = result;
+  _moveTime = result;
 }
