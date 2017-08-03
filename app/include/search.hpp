@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <sys/time.h>
 
-void search(State &state, SearchController &sControl);
+void startSearch(State &state, SearchController &sControl);
 int negamax(int alpha, int beta, int depth, State &state,
             SearchController &sControl, S_PVLINE &pvLine);
 int qSearch(int alpha, int beta, State &state, SearchController &sControl);

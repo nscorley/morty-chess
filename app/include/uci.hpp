@@ -7,6 +7,8 @@
 #define UCI_HPP_INCLUDE
 
 // external dependencies
+#include <algorithm>
+#include <ctime>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -22,6 +24,8 @@
 
 void uciGo(std::vector<std::string> inputParts,
            SearchController uciSearchControl);
+void uciSetPosition(std::vector<std::string> inputParts, std::string input,
+                    State &uciGameState);
 
 class UCI {
 private:

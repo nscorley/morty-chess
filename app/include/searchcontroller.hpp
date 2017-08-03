@@ -24,22 +24,29 @@ public:
   // TT_EVAL, TT_REORDERING, PV_SEARCH, ASPIRATION_WINDOWS, QS_REORDERING}
   bool _features[NUM_OF_FEATURES] = {true, true, true, true, true,
                                      true, true, true, true, true};
-  // Timing
-  int _timeLimit = 10; // i.e. seconds.move
-  int _wTime;          // Amount of time white has left
-  int _bTime;          // Amount of time black has left
-  int _wInc = 0;       // White increment/move
-  int _bInc = 0;       // Black increment/move
-  int _moveToGo;       // Number of moves before next time control
-  int _nodeLimit;      // Limit to how many nodes searched
-  int _analysisSide = WHITE;
-  double _dampeningFactor = 0.03;
-  int _upperMoveBound = 100;
+  // UCI timing
+  int _moveTime;  // i.e. seconds.move
+  int _wTime;     // time (for game) white has left
+  int _bTime;     // time (for game)black has left
+  int _wInc;      // white increment/move
+  int _bInc;      // black increment/move
+  int _moveToGo;  // number of moves before next time control
+  int _nodeLimit; // limit to how many nodes searched
 
+  // which side the engine is playing
+  int _analysisSide = WHITE;
+
+  // game timing computations
+  double _dampeningFactor = 0.03; // factor to lower time after middle game
+  int _upperMoveBound = 100; // expected number of moves per game (upper bound)
+
+  // because nobody likes a draw
   int _contemptFactor = -50;
 
   bool _stopSearch = false;
   timeval _startTime;
+
+  // search statistics
   int _totalNodes = 0;
   int _qNodes = 0;
   int _mainNodes = 0;
@@ -51,8 +58,12 @@ public:
   int _alphaNodes = 0;
   int _betaNodes = 0;
   int _maxDepth = 0;
+
+  // move initializations
   Move _currMove = 0;
   int _currMoveNumber = 0;
+
+  // what is this for? TT?
   HashTable table;
 
   void getAllottedTime(int totalMoves);
@@ -61,4 +72,4 @@ public:
   std::string featuresToString();
 };
 
-#endif /* defined(__Seanet__searchcontroller__) */
+#endif
