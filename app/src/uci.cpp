@@ -164,7 +164,6 @@ void uciGo(vector<string> inputParts, SearchController &_uciSearchControl) {
     case G_PONDER:
       _uciSearchControl._moveTime = INT_MAX;
       _uciSearchControl._depthLimit = INT_MAX;
-      cout << _uciSearchControl._moveTime << " MS/S FIRST" << endl;
       break;
     case G_WTIME:
       _uciSearchControl._wTime = stoi(inputParts.at(i + 1));
