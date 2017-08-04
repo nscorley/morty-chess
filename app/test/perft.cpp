@@ -1,3 +1,10 @@
+/**
+ * The PERFT test runs through a set of particularly complicated test positions
+ * and generates moves for the first 6 depths. The total number of generated
+ * moves is compared against the accepted number. This should be run after any
+ * changes to move generation.
+ **/
+
 #include "catch.hpp"
 #include "movegenerator.hpp"
 #include "state.hpp"
@@ -25,7 +32,10 @@ int perftTest(State state, int depth) {
   return runningSum;
 }
 
-TEST_CASE("PERFT Test", "[perft, movegeneration]") {
+/**
+ * Contains 126 test positions.
+ **/
+TEST_CASE("PERFT Test", "[movegeneration]") {
   // populate hash tables, etc.
   initPresets();
 
