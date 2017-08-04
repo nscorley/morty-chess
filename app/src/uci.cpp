@@ -124,7 +124,6 @@ void UCI::takeUCIInput(istream &inputStr, ostream &outputStr) {
       uciGo(inputParts, _uciSearchControl);
       searching = true;
       _uciSearchControl._analysisSide = _uciGameState._sideToMove;
-      outputStr << _uciSearchControl._moveTime << " MS/S Later" << endl;
       searchThread =
           thread(startSearch, ref(_uciGameState), ref(_uciSearchControl));
       break;
