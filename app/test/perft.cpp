@@ -2,30 +2,30 @@
 #include "movegenerator.hpp"
 #include "state.hpp"
 #include "util.hpp"
-
-int leafNodes = 0;
+using namespace std;
 
 // recursive accessory function for perft tests
-int perftTest(State &state, int depth, int leafNodes) {
+int perftTest(State state, int depth) {
   // first depth the current node is the leaf node
-  if (depth == 0) {
-    return leafNodes + 1;
+  if (depth <= 0) {
+    return 1;
   }
 
   // calculate legal moves
-  std::vector<int> moves = generatePseudoMoves(state);
-  for (std::vector<int>::iterator moveIt = moves.begin(); moveIt != moves.end();
+  vector<int> moves = generatePseudoMoves(state);
+  int runningSum = 0;
+  for (vector<int>::iterator moveIt = moves.begin(); moveIt != moves.end();
        ++moveIt) {
     state.makeMove(*moveIt);
     if (state.isPositionLegal()) {
-      perftTest(state, depth - 1, leafNodes + 1);
+      runningSum += perftTest(state, depth - 1);
     }
     state.takeMove();
   }
-  return 0;
+  return runningSum;
 }
 
-TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
+TEST_CASE("PERFT Test", "[perft, movegeneration]") {
   // populate hash tables, etc.
   initPresets();
 
@@ -39,10 +39,11 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
   const clock_t startTime = clock();
 
   // get position strings
-  std::ifstream file("perfttests.text");
-  std::string line;
-  std::vector<std::string> data;
-  while (std::getline(file, line)) {
+  ifstream file("app/test/res/perfttests.text");
+
+  string line;
+  vector<string> data;
+  while (getline(file, line)) {
     data.push_back(line);
   }
 
@@ -53,8 +54,7 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
   int testNum = perftStart - 1;
 
   // loop through positions
-  for (std::vector<std::string>::iterator it = data.begin(); it != data.end();
-       ++it) {
+  for (vector<string>::iterator it = data.begin(); it != data.end(); ++it) {
     // increment test and check for limit
     testNum++;
     if (testNum > TEST_LIMIT) {
@@ -62,14 +62,14 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
     }
 
     // get FEN and move information
-    std::vector<std::string> subLine = split(*it, ';');
-    std::string FEN = subLine[0];
+    vector<string> subLine = split(*it, ';');
+    string FEN = subLine[0];
     FEN.erase(FEN.find_last_not_of(" \n\r\t") + 1);
 
     // get correct results
     int depths[6] = {0};
     for (int i = 1; i < subLine.size(); i++) {
-      depths[i - 1] = std::stoi(subLine[i].substr(3));
+      depths[i - 1] = stoi(subLine[i].substr(3));
     }
 
     // alter state to represent position
@@ -77,6 +77,8 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
 
     // run test
     printf("\n### Running Test #%d ###\n", testNum);
+    // log the board and print test information
+    // state.printBoard();
     for (int i = 0; i < 6 && depths[i] != 0; i++) {
       // time test
       const clock_t iStartTime = clock();
@@ -86,30 +88,28 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
         break;
       }
 
-      // log the board and print test information
-      state.printBoard();
       printf("Starting test to depth %d on FEN %s\n", i + 1, FEN.c_str());
 
       // initialize node count at depth (what PERFT counts)
-      leafNodes = 0;
+      int leafNodes = 0;
 
       // get pseudo moves
-      std::vector<int> moves = generatePseudoMoves(state);
+      vector<int> moves = generatePseudoMoves(state);
       printf("%lu root moves:\n", moves.size());
 
       // check for legal moves
       int moveNum = 0;
-      for (std::vector<int>::iterator moveIt = moves.begin();
-           moveIt != moves.end(); ++moveIt) {
+      for (vector<int>::iterator moveIt = moves.begin(); moveIt != moves.end();
+           ++moveIt) {
         int oldNodes = leafNodes;
         state.makeMove(*moveIt);
         if (state.isPositionLegal()) {
           // if move is legal, increment move number
           moveNum++;
           // enter recursive loop to calculate leaf nodes
-          perftTest(state, i, leafNodes);
-          printf("Move %d: %s %i\n", (moveNum), moveToUCI(*moveIt).c_str(),
-                 leafNodes - oldNodes);
+          leafNodes += perftTest(state, i);
+          cout << "Move " << moveNum << " " << moveToUCI(*moveIt).c_str() << " "
+               << leafNodes - oldNodes << endl;
         }
         state.takeMove();
       }
@@ -119,6 +119,6 @@ TEST_CASE("PERFT Test Succeeds", "[perft, movegeneration]") {
       REQUIRE((int)depths[i] == leafNodes);
     }
   }
-  printf("PERFT test finished successfully in %f minutes\n",
+  printf("PERFT tests finished successfully in %f minutes\n",
          (float(clock() - startTime) / (CLOCKS_PER_SEC * 60.0)));
 }
