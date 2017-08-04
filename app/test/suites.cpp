@@ -17,8 +17,12 @@ int testPositions(std::string testPath, int secondsPerPosition);
  * Run at 25 seconds/position
  **/
 TEST_CASE("Bratko-Kopec Tests", "[Bratko-Kopec][test-suites]") {
+  std::cout << "==============================================================="
+               "================"
+            << std::endl;
+  std::cout << "Running Bratko-Kopec Tests" << std::endl;
   initPresets();
-  int numCorrect = testPositions("app/test/res/Bratko-Kopec.text", 1);
+  int numCorrect = testPositions("app/test/res/Bratko-Kopec.text", 6);
   std::cout << "Completed Bratko-Kopec tests with " << numCorrect
             << " correct responses." << std::endl;
 }
@@ -28,8 +32,12 @@ TEST_CASE("Bratko-Kopec Tests", "[Bratko-Kopec][test-suites]") {
  * Run at 6 seconds/position
  **/
 TEST_CASE("WAC Tests", "[WAC][test-suites]") {
+  std::cout << "==============================================================="
+               "================"
+            << std::endl;
+  std::cout << "Running Win-At-Chess Tests" << std::endl;
   initPresets();
-  int numCorrect = testPositions("app/test/res/WAC.text", 6);
+  int numCorrect = testPositions("app/test/res/WAC.text", 1);
   std::cout << "Completed Win-At-Chess tests with " << numCorrect
             << " correct responses." << std::endl;
 }
@@ -63,12 +71,15 @@ int testPositions(std::string testPath, int secondsPerPosition = 6) {
 
     if (result == info["bm"]) {
       numCorrect++;
+      std::cout << "Succeeded position. FEN: " << info["fen"].c_str()
+                << "BM (eval): " << result.c_str() << " (" << state._lineEval
+                << " )" << std::endl;
+    } else {
+      std::cout << "Failed position. FEN: " << info["fen"].c_str()
+                << " Engine BM (eval): " << result.c_str() << " ("
+                << state._lineEval << " )"
+                << " Given BM: " << info["bm"].c_str() << " )" << std::endl;
     }
-
-    // log results
-    printf("FEN: %s, Engine BM (eval): %s (%i), Given BM: %s\n",
-           info["fen"].c_str(), result.c_str(), state._lineEval,
-           info["bm"].c_str());
   }
 
   return numCorrect;
