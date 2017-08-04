@@ -1,0 +1,14 @@
+cxx_library(
+  name = 'core',
+  header_namespace = '',
+  exported_headers = subdir_glob([
+    ('include', '**/*.hpp'),
+  ]),
+  srcs = glob([
+    'src/**/*.cpp',
+  ]),
+  visibility = [
+    '//...',
+  ],
+  compiler_flags = ['-std=c++11', "-Wall", "-xc++"],
+)
