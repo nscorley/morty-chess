@@ -85,8 +85,6 @@ TEST_CASE("PERFT Test", "[perft, movegeneration]") {
 
       // check depth
       if (i >= maxDepth) {
-        cout << "DONEONEONEONE" << endl;
-        exit(1);
         break;
       }
 
@@ -121,6 +119,6 @@ TEST_CASE("PERFT Test", "[perft, movegeneration]") {
       REQUIRE((int)depths[i] == leafNodes);
     }
   }
-  printf("PERFT test finished successfully in %f minutes\n",
+  printf("PERFT tests finished successfully in %f minutes\n",
          (float(clock() - startTime) / (CLOCKS_PER_SEC * 60.0)));
 }
