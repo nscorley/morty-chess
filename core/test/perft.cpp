@@ -49,7 +49,11 @@ TEST_CASE("PERFT Test", "[movegeneration]") {
   const clock_t startTime = clock();
 
   // get position strings
-  ifstream file("app/test/res/perfttests.text");
+  string filename = "core/test/res/perfttests.text";
+  ifstream file(filename);
+  if (!file) {
+    FAIL(strerror(errno));
+  }
 
   string line;
   vector<string> data;

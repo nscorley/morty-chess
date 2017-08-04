@@ -1,0 +1,11 @@
+cxx_binary(
+  name = 'test',
+  headers = ["catch.hpp"],
+  srcs = glob([
+    '**/*.cpp',
+  ]),
+  deps = [
+    '//core:core',
+  ],
+  compiler_flags = ['-std=c++11', "-Wall", "-xc++"],
+)

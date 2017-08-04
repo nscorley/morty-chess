@@ -49,6 +49,9 @@ int testPositions(std::string testPath, int secondsPerPosition = 6) {
 
   // loop through positions
   std::ifstream file(testPath);
+  if (!file) {
+    FAIL(strerror(errno));
+  }
   std::string line;
   while (std::getline(file, line)) {
     // parse line into components
