@@ -22,7 +22,7 @@ TEST_CASE("Bratko-Kopec Tests", "[Bratko-Kopec][test-suites]") {
             << std::endl;
   std::cout << "Running Bratko-Kopec Tests" << std::endl;
   initPresets();
-  int numCorrect = testPositions("app/test/res/Bratko-Kopec.text", 6);
+  int numCorrect = testPositions("app/test/res/Bratko-Kopec.text", 25);
   std::cout << "Completed Bratko-Kopec tests with " << numCorrect
             << " correct responses." << std::endl;
 }
@@ -37,7 +37,7 @@ TEST_CASE("WAC Tests", "[WAC][test-suites]") {
             << std::endl;
   std::cout << "Running Win-At-Chess Tests" << std::endl;
   initPresets();
-  int numCorrect = testPositions("app/test/res/WAC.text", 1);
+  int numCorrect = testPositions("app/test/res/WAC.text", 6);
   std::cout << "Completed Win-At-Chess tests with " << numCorrect
             << " correct responses." << std::endl;
 }
