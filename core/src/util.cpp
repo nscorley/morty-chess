@@ -354,7 +354,7 @@ string indexToUCI(int index) {
   return uci;
 }
 
-string boardToFEN(const State &b) {
+string stateToFEN(const State &b) {
   string FEN = "";
   int indices[64];
   int *pindex = indices;
@@ -400,7 +400,7 @@ string boardToFEN(const State &b) {
   return FEN;
 }
 
-State boardFromFEN(string FEN) {
+State stateFromFEN(string FEN) {
   State b;
   if (FEN == "startpos") {
     FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -610,6 +610,7 @@ string moveToUCI(int m) {
   return uci;
 }
 
+// converts a string of the form "a1a3" to a move object
 int moveFromUCI(string uci) {
   if (uci.length() != 4 && uci.length() != 5) {
     return 0;
@@ -772,22 +773,15 @@ vector<Move> getGameMoveLine(string game) {
   int moveNum = 0;
   vector<string> movesSAN = split(game, ' ');
   vector<Move> moveLine;
-  State state = boardFromFEN("startpos");
+  State state = stateFromFEN("startpos");
   ;
   for (string moveSAN : movesSAN) {
     if (moveSAN == "") {
       break;
     }
-
     if (moveNum % 2 == 0) {
       moveSAN = moveSAN.substr(moveSAN.find(".") + 1);
     }
-    //    state.printBoard();
-    //    cout << boardToFEN(state) << endl;
-    //    if (!state.isPositionLegal()) {
-    //      cout << "ILLEGAL POSITION!" << endl;
-    //    }
-    //    cout << "\nParsing '" << moveSAN << "'" << endl;
     Move move = moveFromSAN(moveSAN, state);
     state.makeMove(move);
 

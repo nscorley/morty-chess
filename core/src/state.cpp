@@ -9,7 +9,7 @@
 #include <ostream>
 using namespace std;
 
-void State::printBoard() const {
+void State::printState() const {
   for (int y = 7; y >= 0; y--) {
     string string = "";
     for (int x = 0; x < 8; x++) {
@@ -85,7 +85,7 @@ void State::makeMove(Move &move) {
     int toX = to % 8;
     if (fromX != toX && !M_ISCAPTURE(move)) {
       if (_EPTarget == -1) {
-        printBoard();
+        printState();
         printf("ERROR: EN PASSANT ON INVALID SQUARE! Move: %s (%i); captured "
                "Piece: %i\n",
                moveToUCI(move).c_str(), move, M_CAPTUREDP(move));
@@ -191,11 +191,10 @@ void State::makeMove(Move &move) {
     break;
   }
   default:
-    printBoard();
-    cout << "MOVE: " << moveToUCI(move) << "\n";
-    cout << "PIECE: " << movingP << "\n";
-    cout
-        << "Unknown piece passed to makeMove() function. Exiting with error.\n";
+    printState();
+    cout << "### ERROR ###" << endl;
+    cout << "Move (illegal): " << moveToUCI(move) << endl;
+    cout << "Piece (illegal): " << movingP << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -229,7 +228,7 @@ void State::takeMove() {
   _history.pop_back();
   Move move = undo._move;
   if (!move) {
-    printBoard();
+    printState();
     cout << "Trying to Undo a NULL move.\n";
     exit(EXIT_FAILURE);
   }
@@ -303,6 +302,19 @@ bool State::isLegalMove(Move move) {
   bool isLegal = isPositionLegal();
   takeMove();
   return isLegal;
+}
+
+bool State::isCheckmate() {
+  vector<int> moves = generatePseudoMoves(*this);
+  for (Move m : moves) {
+    this->makeMove(m);
+    if (this->isPositionLegal()) {
+      this->takeMove();
+      return false;
+    }
+    this->takeMove();
+  }
+  return true;
 }
 
 bool State::isInCheck(int side) const {

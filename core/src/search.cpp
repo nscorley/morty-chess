@@ -20,7 +20,7 @@ void startSearch(State &state, SearchController &sControl) {
   sControl.resetStats();
   // set the _moveTime member variable to calculated or given amount
   sControl.getAllottedTime(state._fullMoveCounter);
-  if (sControl._output) {
+  if (sControl._output && !sControl._uciOutput) {
     std::cout << "Searching for " << sControl._moveTime << " milliseconds..."
               << std::endl;
   }
@@ -51,6 +51,7 @@ void startSearch(State &state, SearchController &sControl) {
     if (eval != state._lineEval) {
       cout << "eval != state._lineEval: " << eval << " != " << state._lineEval
            << endl;
+      exit(EXIT_FAILURE);
     };
 
     timeval currTime;
@@ -129,7 +130,6 @@ int negamax(int alpha, int beta, int depth, State &state,
   }
 
   // Check if TT entry exists for given state, and return stored score
-
   Move bestTTMove = NO_MOVE;
   if (!DEBUG || sControl._features[TT_EVAL] ||
       sControl._features[TT_REORDERING]) {

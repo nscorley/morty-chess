@@ -5,15 +5,18 @@
 #ifndef STATE_HPP_INCLUDE
 #define STATE_HPP_INCLUDE
 
-#include "defs.hpp"
+// forward-declare State and Undo classes
+class State;
+class Undo;
 
+// external dependencies
 #include <stack>
 #include <stdio.h>
 #include <string>
 
-class State;
-class Undo;
-
+// internal dependencies
+#include "defs.hpp"
+#include "movegenerator.hpp"
 #include "util.hpp"
 
 class State {
@@ -33,7 +36,7 @@ public:
   int _phase = 0;
   int _material = 0;
 
-  void printBoard() const;
+  void printState() const;
   void makeMove(Move &move);
   void takeMove();
 
@@ -52,6 +55,7 @@ public:
   bool isLegalMove(Move move);
   bool isLegalCheckEvasion(Move move);
   bool isAbsolutePin(int pinnedSq, int attackedSq, int defendingSide);
+  bool isCheckmate();
 };
 
 // inline functions:

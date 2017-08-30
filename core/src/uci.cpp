@@ -115,7 +115,7 @@ void UCI::takeUCIInput(istream &inputStr, ostream &outputStr) {
       outputStr << "readyok\n";
       break;
     case C_UCI_NEW_GAME:
-      _uciGameState = boardFromFEN("startpos");
+      _uciGameState = stateFromFEN("startpos");
       break;
     case C_POSITION:
       uciSetPosition(inputParts, input, _uciGameState);
@@ -156,6 +156,7 @@ void UCI::takeUCIInput(istream &inputStr, ostream &outputStr) {
 
 void uciGo(vector<string> inputParts, SearchController &_uciSearchControl) {
   for (int i = 1; i < inputParts.size(); i++) {
+    // TODO: add i++ to those that need it (skip next item i.e. movetime 5000)
     switch (mapGoOptions[inputParts.at(i)]) {
     case G_SEARCHMOVES:
       // not implemented
@@ -166,30 +167,38 @@ void uciGo(vector<string> inputParts, SearchController &_uciSearchControl) {
       break;
     case G_WTIME:
       _uciSearchControl._wTime = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_BTIME:
       _uciSearchControl._bTime = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_WINC:
       _uciSearchControl._wInc = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_BINC:
       _uciSearchControl._bInc = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_MOVESTOGO:
       _uciSearchControl._moveToGo = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_DEPTH:
       _uciSearchControl._maxDepth = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_NODES:
       _uciSearchControl._nodeLimit = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_MATE:
       // not implemented
       break;
     case G_MOVETIME:
       _uciSearchControl._moveTime = stoi(inputParts.at(i + 1));
+      i++;
       break;
     case G_INFINITE:
       _uciSearchControl._moveTime = INT_MAX;
@@ -205,15 +214,25 @@ void uciGo(vector<string> inputParts, SearchController &_uciSearchControl) {
 // sets the position based on passed string FEN and other parameters
 void uciSetPosition(vector<string> inputParts, string input,
                     State &_uciGameState) {
+  // index tracking how much has been parsed i.e. where to start looking
+  int parsedIndex = 0;
+  // check if startpos was sent
   string FEN = inputParts.at(1);
   if (FEN == "startpos") {
-    _uciGameState = boardFromFEN("startpos");
+    _uciGameState = stateFromFEN("startpos");
+    // start looking for more information at index 2
+    parsedIndex = 2;
   } else {
-    FEN = input.substr(13);
-    _uciGameState = boardFromFEN(FEN);
+    // compose FEN (vector indices 1-6 inclusive, and first part already there)
+    for (int i = 2; i < 7; i++) {
+      FEN += " " + inputParts.at(i);
+    }
+    _uciGameState = stateFromFEN(FEN);
+    // start looking for move information at index 8
+    parsedIndex = 7;
   }
   int i;
-  for (i = 2; i < inputParts.size(); i++) {
+  for (i = parsedIndex; i < inputParts.size(); i++) {
     if (inputParts.at(i) == "moves") {
       i++;
       break;
@@ -221,6 +240,7 @@ void uciSetPosition(vector<string> inputParts, string input,
   }
   for (; i < inputParts.size(); i++) {
     Move move = moveFromUCI(inputParts.at(i));
+    cout << moveToUCI(move) << endl;
     _uciGameState.makeMove(move);
   }
 }

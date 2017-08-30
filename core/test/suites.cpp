@@ -3,14 +3,19 @@
  * search results with the accepted best move. Do not optimize on these results.
  * Only use these tests as a sanity check after altering search functionality.
  **/
-#include "catch.hpp"
+
+// external dependencies
+#include <catch.hpp>
+
+// internal dependencies
 #include "search.hpp"
 #include "searchcontroller.hpp"
 #include "state.hpp"
 #include "util.hpp"
 
-// declaration of reusable function to text positions file
 int testPositions(std::string testPath, int secondsPerPosition);
+
+// TODO: set benchmarks and require >= benchmarks
 
 /**
  * The Bratko-Kopec tests are 24 positions designed to estimate elo.
@@ -42,6 +47,11 @@ TEST_CASE("WAC Tests", "[WAC][test-suites]") {
             << " correct responses." << std::endl;
 }
 
+/**
+ * Opens the given file and loops through the positions, running search for the
+ * passed amount of time.
+ * Answsers compared with given results
+ **/
 int testPositions(std::string testPath, int secondsPerPosition = 6) {
   // initialize state and number correct
   State state;
@@ -56,7 +66,7 @@ int testPositions(std::string testPath, int secondsPerPosition = 6) {
   while (std::getline(file, line)) {
     // parse line into components
     KeyInfoMap info = splitEDP(line);
-    state = boardFromFEN(info["fen"]);
+    state = stateFromFEN(info["fen"]);
 
     // setup controller
     SearchController sControl;

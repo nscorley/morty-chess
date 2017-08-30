@@ -8,7 +8,6 @@
 #include <iostream>
 #include <thread>
 #include <vector>
-using namespace std;
 
 // internal dependencies
 #include "evaluator.hpp"
@@ -19,6 +18,8 @@ using namespace std;
 #include "state.hpp"
 #include "uci.hpp"
 #include "util.hpp"
+
+using namespace std;
 
 void takeAction();
 void welcomeScreen();
@@ -49,7 +50,7 @@ void welcomeScreen() {
       std::cout << "Entering test mode..." << std::endl;
       std::string FEN = "startpos";
       FEN = "rn1q1rk1/p4ppp/1ppb4/3p4/2PP2b1/2PB1N2/P4PPP/1RBQ1RK1 w - -";
-      gameState = boardFromFEN(FEN);
+      gameState = stateFromFEN(FEN);
       while (true) {
         takeAction();
       }
@@ -62,10 +63,10 @@ void welcomeScreen() {
 
 // take move for testing, not used in UCI communication
 void takeAction() {
-  gameState.printBoard();
+  gameState.printState();
 
   // display current information
-  std::cout << "FEN: " << boardToFEN(gameState) << "; Hash:" << gameState._zHash
+  std::cout << "FEN: " << stateToFEN(gameState) << "; Hash:" << gameState._zHash
             << std::endl;
   std::cout << "Static board evaluation: " << evaluate(gameState) << std::endl;
 
