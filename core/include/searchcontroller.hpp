@@ -20,6 +20,7 @@ public:
   int _uciOutput = false;
   bool _output = true;
 
+  // TODO: this should not be an array like this. period.
   // {PV_REORDERING, SEE_REORDERING, KH_REORDERING, HH_REORDERING, NULL_MOVE,
   // TT_EVAL, TT_REORDERING, PV_SEARCH, QS_REORDERING}
   bool _features[NUM_OF_FEATURES] = {true, true, true, true, true,

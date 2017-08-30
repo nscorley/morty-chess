@@ -5,13 +5,20 @@
  * changes to move generation.
  **/
 
-#include "catch.hpp"
+// external dependencies
+#include <catch.hpp>
+
+// internal dependencies
 #include "movegenerator.hpp"
 #include "state.hpp"
 #include "util.hpp"
+
 using namespace std;
 
-// recursive accessory function for perft tests
+/**
+ * Recursive accessory function that calculates move from a given state until
+ * depth is zero
+ **/
 int perftTest(State state, int depth) {
   // first depth the current node is the leaf node
   if (depth <= 0) {
@@ -35,7 +42,7 @@ int perftTest(State state, int depth) {
 /**
  * Contains 126 test positions.
  **/
-TEST_CASE("PERFT Test", "[movegeneration]") {
+TEST_CASE("PERFT", "[perft]") {
   // populate hash tables, etc.
   initPresets();
 
@@ -49,7 +56,7 @@ TEST_CASE("PERFT Test", "[movegeneration]") {
   const clock_t startTime = clock();
 
   // get position strings
-  string filename = "core/test/res/perfttests.text";
+  string filename = "../core/test/res/perfttests.text";
   ifstream file(filename);
   if (!file) {
     FAIL(strerror(errno));
@@ -87,12 +94,11 @@ TEST_CASE("PERFT Test", "[movegeneration]") {
     }
 
     // alter state to represent position
-    state = boardFromFEN(FEN);
+    state = stateFromFEN(FEN);
 
     // run test
     printf("\n### Running Test #%d ###\n", testNum);
-    // log the board and print test information
-    // state.printBoard();
+    // print test information
     for (int i = 0; i < 6 && depths[i] != 0; i++) {
       // time test
       const clock_t iStartTime = clock();
@@ -135,4 +141,5 @@ TEST_CASE("PERFT Test", "[movegeneration]") {
   }
   printf("PERFT tests finished successfully in %f minutes\n",
          (float(clock() - startTime) / (CLOCKS_PER_SEC * 60.0)));
+  cout << endl;
 }
