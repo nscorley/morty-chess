@@ -1,0 +1,5 @@
+/home/nscorley/ExecutableProjects/morty-chess/test-build/CMakeFiles/rebuild_cache.dir
+/home/nscorley/ExecutableProjects/morty-chess/test-build/CMakeFiles/app.dir
+/home/nscorley/ExecutableProjects/morty-chess/test-build/CMakeFiles/morty-chess.dir
+/home/nscorley/ExecutableProjects/morty-chess/test-build/CMakeFiles/edit_cache.dir
+/home/nscorley/ExecutableProjects/morty-chess/test-build/CMakeFiles/tests.dir

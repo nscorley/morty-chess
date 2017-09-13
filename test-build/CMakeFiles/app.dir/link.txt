@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/app.dir/app/src/main.cpp.o  -o app -Wl,-rpath,/home/nscorley/ExecutableProjects/morty-chess/test-build libmorty-chess.so -lpthread 
