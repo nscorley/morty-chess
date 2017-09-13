@@ -19,12 +19,13 @@ set(Boost_USE_MULTITHREADED ON)
 set (Boost_USE_STATIC_LIBS ON)
 
 # find boost packages
-find_package(Boost 1.64.0 COMPONENTS system filesystem REQUIRED)
+find_package(Boost 1.61.0 COMPONENTS system filesystem REQUIRED)
 
 # prepare "Catch" library for other executables
 set(CATCH_INCLUDE_DIR lib/catch)
 add_library(Catch INTERFACE)
 target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})
+find_package(Threads)
 
 # bring the headers into the project
 include_directories(core/include)
@@ -47,4 +48,4 @@ add_executable(app ${APP})
 
 # link libraries
 target_link_libraries (tests ${Boost_LIBRARIES} ${PROJECT_NAME} Catch)
-target_link_libraries (app ${PROJECT_NAME})
+target_link_libraries (app ${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})

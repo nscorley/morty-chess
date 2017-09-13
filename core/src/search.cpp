@@ -4,6 +4,8 @@
 
 #include "search.hpp"
 #include <algorithm>
+#include <string.h>
+#include <limits.h>
 using namespace std;
 
 int quiescencePly = 0;

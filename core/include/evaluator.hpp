@@ -10,6 +10,7 @@
 #include "util.hpp"
 #include <stdio.h>
 #include <vector>
+#include <math.h>
 
 int calculatePhase(State &state);
 int calculateMaterial(State &state);

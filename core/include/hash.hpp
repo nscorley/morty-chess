@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <unordered_map>
+#include <math.h>
 
 enum NodeType { UNSET, EXACT, ALPHA, BETA };
 

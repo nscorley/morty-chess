@@ -2,6 +2,8 @@
  * Implementations of UCI functions
  **/
 #include "../include/uci.hpp"
+#include <string.h>
+#include <limits.h>
 using namespace std;
 
 // value-definitions for mapping UCI commands to hashable values

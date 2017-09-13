@@ -8,6 +8,7 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <pthread.h>
 
 // internal dependencies
 #include "evaluator.hpp"
