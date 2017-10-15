@@ -19,7 +19,7 @@ set(Boost_USE_MULTITHREADED ON)
 set (Boost_USE_STATIC_LIBS ON)
 
 # find boost packages
-find_package(Boost 1.64.0 COMPONENTS system filesystem REQUIRED)
+find_package(Boost 1.61.0 COMPONENTS system filesystem REQUIRED)
 
 # prepare "Catch" library for other executables
 set(CATCH_INCLUDE_DIR lib/catch)
